@@ -3,7 +3,7 @@
     "name": "Prayer Time Notifier",
     "version": "1.0",
     "description": "Get notified for prayer times.",
-    "permissions": ["notifications", "storage", "<ALL_URLS>"],
+    "permissions": ["notifications", "storage", "<ALL_URLS>", "alarms"],
     "browser_action": {
       "default_popup": "popup.html",
       "default_icon": {
