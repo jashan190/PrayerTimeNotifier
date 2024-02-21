@@ -1,0 +1,15 @@
+The ways in order to use popup.js and background.js
+
+
+
+background.js is the script which is always running in the background, meaning that we can not merge the two as one is always running in the background while one only pops up when prompted.
+
+When prompted we could use the users location to calculate prayer time.
+
+We could do this three ways. 
+
+Either in the background only,  there is a built in function to javascript called geolocation. This would violate privacy rights if we do not make a license and agreement form This method will is the background way
+
+Then we could do only in popup.js, which would be the direct method. Meaning we would ask user and then take in the input and find the closest location based on that. Direct approach.
+
+Or could try to mix these two to send the location of the user to background.js from popup.js once and then only update it if they move or something, this method is most complicated but would be most professional.
