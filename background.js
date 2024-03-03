@@ -28,16 +28,26 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     });
 });
 
+function getUserLocation(){
+    console.log("Please pick a location between San Francisco, Los Angeles, or Sacramento")
+
+    
+
+}
 // Placeholder function to simulate fetching prayer times
 function getPrayerTimes() {
-    // In a real scenario, this function would fetch prayer times from an API
-    // Here we just return some static times for demonstration purposes
-    const now = new Date();
-    return {
-        Fajr: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 5, 0).toString(),
-        Dhuhr: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0).toString(),
-        Asr: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0).toString(),
-        Maghrib: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0).toString(),
-        Isha: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 20, 0).toString()
-    };
-}
+    chrome.storage.local.get('userLocation', function(data) {
+      if (data.userLocation) {
+        fetch('https://api.example.com/prayertimes?location=' + encodeURIComponent(data.userLocation))
+          .then(response => response.json())
+          .then(prayerTimes => {
+            // Logic to set alarms based on prayerTimes
+          })
+          .catch(error => console.error('Error fetching prayer times:', error));
+      } else {
+        console.log("User location not set");
+        // Handle scenario where location is not set
+      }
+    });
+  }
+  
