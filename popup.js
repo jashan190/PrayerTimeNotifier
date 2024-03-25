@@ -1,71 +1,68 @@
-// popup.js
+
+// This event ensures that we manipulate the DOM only after it has been loaded
 document.addEventListener('DOMContentLoaded', function() {
   var form = document.getElementById('location-form');
+  
   form.addEventListener('submit', function(event) {
     event.preventDefault();
+    var city = document.getElementById('city').value;
+    var country = document.getElementById('country').value;
+    var state = document.getElementById('state').value; 
 
-    // Get the value from the input
-    var userLocation = document.getElementById('location').value;
+    var userLocation = { city, country, state };
 
-    // Store the location in Chrome's local storage
     chrome.storage.local.set({ 'userLocation': userLocation }, function() {
-      console.log('Location is stored.');
+      console.log('Location is stored in Chrome local storage.');
+      fetchPrayerTimesForLocation(userLocation);
     });
-
-    // Fetch prayer times for the user location
-    fetchPrayerTimesForLocation(userLocation);
   });
 });
 
 function fetchPrayerTimesForLocation(location) {
-  // Implement the API call to fetch prayer times
-  // This is a placeholder URL, replace it with the actual API endpoint
-  var apiURL = 'https://api.pray.zone/v2/times/today.json?city=' + encodeURIComponent(location);
-  
+  var apiURL = `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(location.city)}&country=${encodeURIComponent(location.country)}&state=${encodeURIComponent(location.state)}&method=2`;
+
   fetch(apiURL)
     .then(response => {
       if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
+        throw new Error('Network response was not ok: ' + response.statusText);
       }
       return response.json();
     })
     .then(data => {
-      displayPrayerTimes(data);
+      console.log("API response data:", data);
+      if (data.code === 200) {
+        displayPrayerTimes(data); // Pass the whole data object to the display function
+      } else {
+        // Handle API errors, such as invalid location, server error, etc.
+        document.getElementById('prayerTimes').textContent = 'Error fetching prayer times: ' + data.status;
+      }
     })
     .catch(error => {
       console.error('There has been a problem with your fetch operation:', error);
-      // Handle the error
+      document.getElementById('prayerTimes').textContent = 'Error fetching prayer times. Please try again later.';
     });
 }
 
 function displayPrayerTimes(prayerData) {
-  // Extract prayer times from the data object
-  // This will depend on the structure of the response from your API
-  // Below is a placeholder example assuming a certain data structure
-  var times = prayerData.results.datetime[0].times;
+  // Check if the necessary data is present
+  if (!prayerData || !prayerData.data || !prayerData.data.timings) {
+    console.error('Invalid prayer data:', prayerData);
+    return;
+  }
+
+  // Access the timings directly from the data object
+  const timings = prayerData.data.timings;
   var prayerTimesElement = document.getElementById('prayerTimes');
-  
+
   // Clear previous times
   prayerTimesElement.innerHTML = '';
 
   // Append each prayer time to the prayerTimes div
-  Object.keys(times).forEach(prayer => {
-    var time = times[prayer];
+  Object.keys(timings).forEach(prayer => {
+    var time = timings[prayer];
     var para = document.createElement('p');
-    para.textContent = prayer + ': ' + time;
+    para.textContent = `${prayer}: ${time}`;
     prayerTimesElement.appendChild(para);
   });
 }
 
-form.addEventListener('submit', function(event) {
-  event.preventDefault();
-  var userLocation = document.getElementById('location').value;
-  
-  // Store the location in Chrome's local storage
-  chrome.storage.local.set({ 'userLocation': userLocation }, function() {
-    console.log('Location is stored.');
-  });
-
-  // Existing code to fetch prayer times
-  fetchPrayerTimesForLocation(userLocation);
-});

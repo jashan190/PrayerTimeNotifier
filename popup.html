@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,16 +6,19 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h1>Prayer TImes</h1>
+    <h1>Prayer Times</h1>
     <form id="location-form">
-        <label for="location">Enter Your location</label>
-        <input type ="text" id ="location" placeholder="City name" required>
-        <button type ="submit">Submit</button>
+        <label for="city">City:</label>
+        <input type="text" id="city" placeholder="City name" required>
+        <label for="country">Country:</label>
+        <input type="text" id="country" placeholder="Country name" required>
+        <label for="state">State (optional):</label>
+        <input type="text" id="state" placeholder="State name">
+        <button type="submit">Submit</button>
     </form>
     <div id="prayerTimes">
         <!-- Prayer times will be dynamically inserted here by popup.js -->
     </div>
-    <button id="refresh">Refresh Times</button>
     <script src="popup.js"></script>
 </body>
 </html>
