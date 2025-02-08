@@ -1,3 +1,10 @@
+
+
+⚠️ This project has been replaced by [SalahSync](https://github.com/jashan190/SalahSync), a more advanced version with improved functionality and a React-based architecture.
+
+
+
+
 # Prayer Time Notifier
 
 This Chrome extension is designed to provide Muslims with timely notifications for the five daily prayers. It calculates the prayer times based on the user's location and selected jurisprudential opinion (Madhab).
